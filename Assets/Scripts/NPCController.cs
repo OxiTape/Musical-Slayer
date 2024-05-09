@@ -46,10 +46,11 @@ public class NPCController : MonoBehaviour
         //Plug it into my rigidbody
         RB.velocity = vel;
         //If I fall into the void...
-        if (transform.position.y < -16)
+        var transformPosition = transform.position;
+        if (transformPosition.y < -16)
         {
             //Respawn
-            NPCController e = Instantiate(FriendPrefab, EnemySpawnPos+new Vector3(15, 1, 10);
+            transformPosition.y = 1;
         }
     }
 }
