@@ -49,7 +49,7 @@ public class NPCController : MonoBehaviour
         if (transform.position.y < -16)
         {
             //Respawn
-            NPCController e = Instantiate(FriendPrefab, EnemySpawnPos+new Vector3(15, Random.Range(1, 10)), Quaternion.identity);
+            NPCController e = Instantiate(FriendPrefab, EnemySpawnPos+new Vector3(15, 1, 10);
         }
     }
 }
