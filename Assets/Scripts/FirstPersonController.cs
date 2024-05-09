@@ -11,15 +11,22 @@ public class FirstPersonController : MonoBehaviour
     
     public Rigidbody RB;
     public Projectile3DController ProjectilePrefab;
+    //My Sound Effects
+    public AudioClip JumpSFX;
+    public AudioClip OuchSFX;
+    public AudioClip MusicSFX;
     //TextMeshPro is a component that draws text on the screen.
     //TextMeshProUGUI draws text that only shows on the game screen instead of in the game itself.
     //We use this one to show our score.
     public TextMeshProUGUI ScoreText;
+    public AudioSource AS;
     
     //Character stats
     public float MouseSensitivity = 3;
     public float WalkSpeed = 10;
     public float JumpPower = 7;
+    //This is how many points we currently have
+    public static int Score = 0;
     
     //A list of all the solid objects I'm currently touching
     public List<GameObject> Floors;
@@ -28,9 +35,15 @@ public class FirstPersonController : MonoBehaviour
     
     void Start()
     {
+        //Play music
+        AS.PlayOneShot(MusicSFX);
+        Score = 0;
+        //During setup we call UpdateScore to make sure our score text looks correct
+        UpdateScore();
         //Turn off my mouse and lock it to center screen
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        
     }
 
     
@@ -60,7 +73,7 @@ public class FirstPersonController : MonoBehaviour
             
             //transform.forward/right are relative to the direction my body is facing
             if (Input.GetKey(KeyCode.W))
-                move += transform.forward; 
+                move += transform.forward;
             if (Input.GetKey(KeyCode.S))
                 move -= transform.forward;
             if (Input.GetKey(KeyCode.A))
@@ -108,5 +121,12 @@ public class FirstPersonController : MonoBehaviour
     {
         //When I stop touching something, remove it from the list of things I'm touching
         Floors.Remove(other.gameObject);
+    }
+    //Functions are shortcut phrases for when you don't wanna copy paste of bunch of code over and over again
+    //This function updates the game's score text to show how many points you have
+    //Even if your 'score' variable goes up, if you don't update the text the player doesn't know
+    public void UpdateScore()
+    {
+        ScoreText.text = "Score: " + Score;
     }
 }
