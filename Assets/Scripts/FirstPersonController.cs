@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class FirstPersonController : MonoBehaviour
 {
     //The camera is inside the player
@@ -10,6 +11,10 @@ public class FirstPersonController : MonoBehaviour
     
     public Rigidbody RB;
     public Projectile3DController ProjectilePrefab;
+    //TextMeshPro is a component that draws text on the screen.
+    //TextMeshProUGUI draws text that only shows on the game screen instead of in the game itself.
+    //We use this one to show our score.
+    public TextMeshProUGUI ScoreText;
     
     //Character stats
     public float MouseSensitivity = 3;
@@ -34,10 +39,18 @@ public class FirstPersonController : MonoBehaviour
         //If my mouse goes left/right my body moves left/right
         float xRot = Input.GetAxis("Mouse X") * MouseSensitivity;
         transform.Rotate(0,xRot,0);
-        
         //If my mouse goes up/down my aim (but not body) go up/down
+        //float yRot = -Input.GetAxis("Mouse Y") * MouseSensitivity;
+        //Eyes.transform.Rotate(yRot,0,0);
+        //This code should make it so when you look up or down theres a cap to how far you can look in either direction
         float yRot = -Input.GetAxis("Mouse Y") * MouseSensitivity;
-        Eyes.transform.Rotate(yRot,0,0);
+        Vector3 eRot = Eyes.transform.localRotation.eulerAngles;
+        eRot.x += yRot;
+        if (eRot.x < -180) eRot.x += 360;
+        if (eRot.x > 180) eRot.x -= 360;
+        eRot = new Vector3(Mathf.Clamp(eRot.x, -90, 90),0,0);
+        Eyes.transform.localRotation = Quaternion.Euler(eRot);
+        Debug.Log("NoSpeen");
 
         //Movement code
         if (WalkSpeed > 0)
@@ -47,7 +60,7 @@ public class FirstPersonController : MonoBehaviour
             
             //transform.forward/right are relative to the direction my body is facing
             if (Input.GetKey(KeyCode.W))
-                move += transform.forward;
+                move += transform.forward; 
             if (Input.GetKey(KeyCode.S))
                 move -= transform.forward;
             if (Input.GetKey(KeyCode.A))
