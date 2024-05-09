@@ -15,6 +15,15 @@ public class NPCController : MonoBehaviour
     //Who do I walk towards?
     public GameObject Target;
 
+    //The prefab for the monster that spawns
+    public NPCController FriendPrefab;
+    //How long until the next monster spawns?
+    public float SpawnTimer=0;
+    //Once a monster spawns, how long until the next?
+    public float SpawnMaxTimer=3;
+    //Where do the monsters spawn?
+    public Vector3 EnemySpawnPos;
+    
     void Start()
     {
         //At the start of the game I should play my walk animation
@@ -36,5 +45,11 @@ public class NPCController : MonoBehaviour
         vel.y = RB.velocity.y;
         //Plug it into my rigidbody
         RB.velocity = vel;
+        //If I fall into the void...
+        if (transform.position.y < -16)
+        {
+            //Respawn
+            NPCController e = Instantiate(FriendPrefab, EnemySpawnPos+new Vector3(15, Random.Range(1, 10)), Quaternion.identity);
+        }
     }
 }
